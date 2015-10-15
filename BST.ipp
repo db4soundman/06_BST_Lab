@@ -192,30 +192,27 @@ Node<Key,T>* BST<Key,T>::remove(Key k, Node<Key,T>* r){
             delete r;
             return NULL;
         }
-        else if  (r->left!=NULL && r->right!=NULL){
-            Node<Key, T>* newR = min(r->right);
-            Key temp = r->k;
-            T tempData = r->data;
-            r->data = newR->data;
+        else if  (r->left==NULL && r->right!=NULL){
+            Node<Key, T> *newR = r->right;
             r->k = newR->k;
-            newR->k =temp;
-            newR->data = tempData;
+            r->data = newR->data;
+            r->right = newR->right;
+            r->left = newR->left;
             r->right = remove(k, r->right);
+            delete newR;
             return r;
-
-
         }
         
         else{
-            Node<Key, T>* newR = r->right;
-            if (newR==NULL) {
-                newR = r->left;
-                delete r;
-                return newR;
-                }
-            delete r;
-            return newR;
-
+            Node<Key, T>* temp = max (r->left);
+            Key tempKey = r->k;
+            T tempData = r->data;
+            r->data = temp->data;
+            r->k = temp->k;
+            temp->k =tempKey;
+            temp->data = tempData;
+            r->left = remove(k, r->left);
+            return r;
         }
     }
     
